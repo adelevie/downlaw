@@ -9,6 +9,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "gulp-react": "^0.3.3"
+    "gulp-react": "^0.3.3",
+    "gulp-uglify": "^0.2.1",
+    "gulp-util": "^2.2.14"
   }
 }
