@@ -77,7 +77,6 @@ var citations = function(converter) {
 
 
         if (matches === 0) {
-          console.log("exited");
           return source;
         }
 
