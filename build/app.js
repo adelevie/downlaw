@@ -35,8 +35,7 @@ function makeDcCodeUrl(citation) {
 
 function dclawCited(citation) {
   var lawName = 'L' + citation.dc_law.period + "-" + citation.dc_law.number + '.pdf';
-  var url = 'http://openlims.org/public/' + lawName;
-  return linked(url, citation.match);
+  return 'http://openlims.org/public/' + lawName;
 }
 
 function makeJudicialUrl(citation) {
