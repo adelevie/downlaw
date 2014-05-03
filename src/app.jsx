@@ -1,16 +1,16 @@
 /** @jsx React.DOM */
 
-var Container = React.createClass({displayName: 'Container',
-  render: function() {
-    return (
-      <div className="container">
-        <div className="row clearfix">
-          {this.props.children}
-        </div>
-      </div>
-    );
-  }
-});
+/*
+
+This file contains a few parts:
+
+1. functions that convert a citation object into a url
+2. An extension to the showdown parser that hooks into citation.js
+3. React code which handles all of the UI and DOM manipulation
+
+*/
+
+// citation => url functions
 
 var makeUsCodeUrl = function(citation) {
   var usc = citation.usc;
@@ -71,6 +71,7 @@ var makeATag = function(name, href) {
   return open + middle + close;
 }
 
+// showdown parser extension
 
 var citations = function(converter) {
   return  [
@@ -98,6 +99,20 @@ var citations = function(converter) {
 window.Showdown.extensions.citations = citations; 
 
 var converter = new Showdown.converter({ extensions: ['citations'] });
+
+// React stuff
+
+var Container = React.createClass({displayName: 'Container',
+  render: function() {
+    return (
+      <div className="container">
+        <div className="row clearfix">
+          {this.props.children}
+        </div>
+      </div>
+    );
+  }
+});
 
 var MarkdownEditor = React.createClass({displayName: 'MarkdownEditor',
   getInitialState: function() {
@@ -133,6 +148,8 @@ var MarkdownEditor = React.createClass({displayName: 'MarkdownEditor',
     );
   }
 });
+
+// last but not least, this actually mounts the React components to the DOM
 
 React.renderComponent(
   <Container>

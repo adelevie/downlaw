@@ -1,47 +1,43 @@
 /** @jsx React.DOM */
 
-var Container = React.createClass({displayName: 'Container',
-  render: function() {
-    return (
-      React.DOM.div( {className:"container"}, 
-        React.DOM.div( {className:"row clearfix"}, 
-          this.props.children
-        )
-      )
-    );
-  }
-});
+/*
+
+This file contains a few parts:
+
+1. functions that convert a citation object into a url
+2. An extension to the showdown parser that hooks into citation.js
+3. React code which handles all of the UI and DOM manipulation
+
+*/
+
+// citation => url functions
 
 var makeUsCodeUrl = function(citation) {
   var usc = citation.usc;
   var title = usc.title;
   var section = usc.section;
   return "http://www.law.cornell.edu/uscode/text/" + title + "/" + section;
-};
+}
 
 var makeCfrUrl = function(citation) {
   var cfr = citation.cfr;
   var title = cfr.title;
   var section = cfr.part;
   return "http://www.law.cornell.edu/cfr/text/" + title + "/" + section;
-};
+}
 
 var makeDcCodeUrl = function(citation) {
   var dc_code = citation.dc_code;
   var title = dc_code.title;
   var section = dc_code.section;
   return "http://dccode.org/simple/sections/" + title + "-" + section;
-};
-
-var dclawCited = function(citation) {
-  var lawName = 'L' + citation.dc_law.period + "-" + citation.dc_law.number + '.pdf';
-  return 'http://openlims.org/public/' + lawName;
-};
+}
 
 var makeJudicialUrl = function(citation) {
+  console.log("judicialing");
   // nice 'n easy
   return "https://casetext.com/search#!/?q=" + citation.match;
-};
+}
 
 var removeTrailingPeriod = function(str) {
   var lastChar = str.slice(-1);
@@ -60,7 +56,6 @@ var makeUrl = function(citation) {
   if (citation.type === "cfr") { return makeCfrUrl(citation); }
   if (citation.type === "dc_code") { return makeDcCodeUrl(citation); }
   if (citation.type === "judicial") { return makeJudicialUrl(citation); }
-  if (citation.type === "dc_law") {return dclawCited(citation);}
 
   var match = citation.match;
   // if no match, default to casetext
@@ -76,6 +71,7 @@ var makeATag = function(name, href) {
   return open + middle + close;
 }
 
+// showdown parser extension
 
 var citations = function(converter) {
   return  [
@@ -103,6 +99,20 @@ var citations = function(converter) {
 window.Showdown.extensions.citations = citations; 
 
 var converter = new Showdown.converter({ extensions: ['citations'] });
+
+// React stuff
+
+var Container = React.createClass({displayName: 'Container',
+  render: function() {
+    return (
+      React.DOM.div( {className:"container"}, 
+        React.DOM.div( {className:"row clearfix"}, 
+          this.props.children
+        )
+      )
+    );
+  }
+});
 
 var MarkdownEditor = React.createClass({displayName: 'MarkdownEditor',
   getInitialState: function() {
@@ -138,6 +148,8 @@ var MarkdownEditor = React.createClass({displayName: 'MarkdownEditor',
     );
   }
 });
+
+// last but not least, this actually mounts the React components to the DOM
 
 React.renderComponent(
   Container(null, 
