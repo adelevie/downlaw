@@ -2,7 +2,7 @@
 
 Write markdown with legal citations on the left, get rendered markdown on the right. Oh, and the legal citations become links.
 
-See the demo: http://adelevie.github.io/downlaw/index.html
+See the demo: http://adelevie.github.io/downlaw/
 
 ### Dev notes
 
