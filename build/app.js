@@ -30,7 +30,7 @@ function makeDcCodeUrl(citation) {
   var dc_code = citation.dc_code;
   var title = dc_code.title;
   var section = dc_code.section;
-  return "http://dccode.org/browser/#/" + title + "/" + title + "-" + section;
+  return "http://dccode.org/simple/sections/" + title + "-" + section;
 }
 
 function makeJudicialUrl(citation) {
