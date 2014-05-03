@@ -33,6 +33,11 @@ function makeDcCodeUrl(citation) {
   return "http://dccode.org/simple/sections/" + title + "-" + section;
 }
 
+function dclawCited(citation) {
+  var lawName = 'L' + citation.dc_law.period + "-" + citation.dc_law.number + '.pdf';
+  return 'http://openlims.org/public/' + lawName;
+}
+
 function makeJudicialUrl(citation) {
   console.log("judicialing");
   // nice 'n easy
@@ -56,6 +61,7 @@ function makeUrl(citation) {
   if (citation.type === "cfr") { return makeCfrUrl(citation); }
   if (citation.type === "dc_code") { return makeDcCodeUrl(citation); }
   if (citation.type === "judicial") { return makeJudicialUrl(citation); }
+  if (citation.type === "dc_law") {return dclawCited(citation);}
 
   var match = citation.match;
   // if no match, default to casetext
