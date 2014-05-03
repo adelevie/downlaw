@@ -17,27 +17,31 @@ var makeUsCodeUrl = function(citation) {
   var title = usc.title;
   var section = usc.section;
   return "http://www.law.cornell.edu/uscode/text/" + title + "/" + section;
-}
+};
 
 var makeCfrUrl = function(citation) {
   var cfr = citation.cfr;
   var title = cfr.title;
   var section = cfr.part;
   return "http://www.law.cornell.edu/cfr/text/" + title + "/" + section;
-}
+};
 
 var makeDcCodeUrl = function(citation) {
   var dc_code = citation.dc_code;
   var title = dc_code.title;
   var section = dc_code.section;
   return "http://dccode.org/simple/sections/" + title + "-" + section;
-}
+};
+
+var dclawCited = function(citation) {
+  var lawName = 'L' + citation.dc_law.period + "-" + citation.dc_law.number + '.pdf';
+  return 'http://openlims.org/public/' + lawName;
+};
 
 var makeJudicialUrl = function(citation) {
-  console.log("judicialing");
   // nice 'n easy
   return "https://casetext.com/search#!/?q=" + citation.match;
-}
+};
 
 var removeTrailingPeriod = function(str) {
   var lastChar = str.slice(-1);
@@ -56,6 +60,7 @@ var makeUrl = function(citation) {
   if (citation.type === "cfr") { return makeCfrUrl(citation); }
   if (citation.type === "dc_code") { return makeDcCodeUrl(citation); }
   if (citation.type === "judicial") { return makeJudicialUrl(citation); }
+  if (citation.type === "dc_law") {return dclawCited(citation);}
 
   var match = citation.match;
   // if no match, default to casetext
