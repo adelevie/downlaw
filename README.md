@@ -25,8 +25,9 @@ A very simple way to host this would be to fork the repo and create a `gh-pages`
 
 ```
 $ git clone git@github.com:[YOUR_USERNAME]/downlaw.git
-$ cd download
+$ cd downlaw
 $ git branch gh-pages
+$ git checkout gh-pages
 $ git push origin gh-pages
 ```
 
