@@ -117,7 +117,7 @@ var Container = React.createClass({displayName: 'Container',
 
 var MarkdownEditor = React.createClass({displayName: 'MarkdownEditor',
   getInitialState: function() {
-    return {value: 'Type some *markdown* here!. Legal citations become links.\n\nSee, e.g., 35 USC 112 and Ashcroft v. Iqbal, 556 U.S. 662 (2009).'};
+    return {value: 'Type some *markdown* here! Legal citations become links.\n\nSee, e.g., 35 USC 112 and Ashcroft v. Iqbal, 556 U.S. 662 (2009).'};
   },
   handleChange: function() {
     this.setState({value: this.refs.textarea.getDOMNode().value});
