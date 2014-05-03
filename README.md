@@ -17,6 +17,19 @@ Pull requests are welcome. File an issue if you have any questions.
 3. Edit `src/app.jsx`, then run `gulp` to transform it into a `.js` file.
 4. Open `index.html` in a browser.
 
+#### Hosting
+
+This is just a simple static website. At minimum, you just need `index.html` exposed to a web server (e.g. any static hostic will suffice) and make sure it points to a copy of `build/app.js`.
+
+A very simple way to host this would be to fork the repo and create a `gh-pages` branch:
+
+```
+$ git clone git@github.com:[YOUR_USERNAME]/downlaw.git
+$ cd download
+$ git branch gh-pages
+$ git push origin gh-pages
+```
+
 ### License
 
 MIT.
