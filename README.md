@@ -12,10 +12,10 @@ Add your favorite legal citation to the default text by editing [`build/app.js`]
 
 Pull requests are welcome. File an issue if you have any questions.
 
-Gulp does not work. 
-
-I use a manual [tool](http://facebook.github.io/react/jsx-compiler.html) to generate js from jsx. One day this will be automated.
-
+1. Clone the repo, cd into it
+2. Run `npm install`
+3. Edit `src/app.jsx`, then run `gulp` to transform it into a `.js` file.
+4. Open `index.html` in a browser.
 
 ### License
 
