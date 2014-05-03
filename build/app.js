@@ -39,6 +39,16 @@ function makeJudicialUrl(citation) {
   return "https://casetext.com/search#!/?q=" + citation.match;
 }
 
+var removeTrailingPeriod = function(str) {
+  var lastChar = str.slice(-1);
+
+  if (lastChar === ".") {
+    str = str.substring(0, str.length - 1);
+  }
+
+  return str;
+};
+
 function makeUrl(citation) {
   console.log(citation.type);
 
@@ -48,12 +58,6 @@ function makeUrl(citation) {
   if (citation.type === "judicial") { return makeJudicialUrl(citation); }
 
   var match = citation.match;
-  var lastChar = match.slice(-1);
-
-  if (lastChar === ".") {
-    match = match.substring(0, match.length - 1);
-  }
-
   // if no match, default to casetext
   return "https://casetext.com/search#!/?q=" + match;
 ;
@@ -82,6 +86,7 @@ var citations = function(converter) {
 
         for (var i=0,len=matches.length; i<len; i++) { 
           var match = matches[i].match;
+          match = removeTrailingPeriod(match);
           source = source.replace(match, makeATag(match, makeUrl(matches[i])));
         }
 
