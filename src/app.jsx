@@ -10,6 +10,10 @@ This file contains a few parts:
 
 */
 
+require('citation');
+var React = require('react');
+var Showdown = require('showdown');
+
 // citation => url functions
 
 var makeUsCodeUrl = function(citation) {
@@ -34,7 +38,6 @@ var makeDcCodeUrl = function(citation) {
 }
 
 var makeJudicialUrl = function(citation) {
-  console.log("judicialing");
   // nice 'n easy
   return "https://casetext.com/search#!/?q=" + citation.match;
 }
@@ -50,8 +53,6 @@ var removeTrailingPeriod = function(str) {
 };
 
 var makeUrl = function(citation) {
-  console.log(citation.type);
-
   if (citation.type === "usc") { return makeUsCodeUrl(citation); }
   if (citation.type === "cfr") { return makeCfrUrl(citation); }
   if (citation.type === "dc_code") { return makeDcCodeUrl(citation); }
@@ -96,9 +97,9 @@ var citations = function(converter) {
     }
   ];
 };
-window.Showdown.extensions.citations = citations; 
+//window.Showdown.extensions.citations = citations; 
 
-var converter = new Showdown.converter({ extensions: ['citations'] });
+var converter = new Showdown.converter({ extensions: [citations] });
 
 // React stuff
 
