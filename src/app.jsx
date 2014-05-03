@@ -4,15 +4,20 @@
 
 This file contains a few parts:
 
-1. functions that convert a citation object into a url
-2. An extension to the showdown parser that hooks into citation.js
-3. React code which handles all of the UI and DOM manipulation
+- oauth.io configuration
+- functions that convert a citation object into a url
+- An extension to the showdown parser that hooks into citation.js
+- React code which handles all of the UI and DOM manipulation
 
 */
 
 require('citation');
 var React = require('react');
 var Showdown = require('showdown');
+
+// oauth.io config
+
+OAuth.initialize('YKdBYPro-nklUlmB5VjObiwxJyg');
 
 // citation => url functions
 
@@ -150,10 +155,26 @@ var MarkdownEditor = React.createClass({displayName: 'MarkdownEditor',
   }
 });
 
+var GitHubLogin = React.createClass({
+  onClick: function(event) {
+    alert("clicked");
+    //OAuth.popup('github', function(err, result) {
+    // handle error with err
+    // use result.access_token in your API request
+    //});
+  },
+  render: function() {
+    return (
+      <button onClick={this.onClick}>Log in with GitHub</button>
+    );
+  }
+});
+
 // last but not least, this actually mounts the React components to the DOM
 
 React.renderComponent(
   <Container>
+    <GitHubLogin />
     <MarkdownEditor />
   </Container>,
   document.getElementById("content")

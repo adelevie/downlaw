@@ -5,7 +5,7 @@ var gutil = require('gulp-util');
 var browserify = require('gulp-browserify');
 
 // comment the next line if you don't want the js to be minified.
-gutil.env.type = 'production';
+//gutil.env.type = 'production';
 
 gulp.task('default', function () {
   return gulp.src('src/app.jsx')
