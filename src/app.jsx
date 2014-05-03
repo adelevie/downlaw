@@ -3,11 +3,11 @@
 var Container = React.createClass({displayName: 'Container',
   render: function() {
     return (
-      React.DOM.div( {className:"container"}, 
-        React.DOM.div( {className:"row clearfix"}, 
-          this.props.children
-        )
-      )
+      <div className="container">
+        <div className="row clearfix">
+          {this.props.children}
+        </div>
+      </div>
     );
   }
 });
@@ -108,35 +108,35 @@ var MarkdownEditor = React.createClass({displayName: 'MarkdownEditor',
   },
   render: function() {
     return (
-      React.DOM.div( {className:"MarkdownEditor"}, 
-        React.DOM.div( {className:"col-md-6 column"}, 
-          React.DOM.h3(null, "Input"),
-          React.DOM.textarea( {className:"field span20", 
-                    id:"textarea", 
-                    rows:"25", 
-                    cols:"60", 
-                    onChange:this.handleChange,
-                    ref:"textarea",
-                    defaultValue:this.state.value} 
-          )
-        ),
-        React.DOM.div( {className:"col-md-6 column"}, 
-          React.DOM.h3(null, "Output"),
-          React.DOM.div(
-            {className:"content",
-            dangerouslySetInnerHTML:{
+      <div className="MarkdownEditor">
+        <div className="col-md-6 column">
+          <h3>Input</h3>
+          <textarea className="field span20" 
+                    id="textarea" 
+                    rows="25" 
+                    cols="60" 
+                    onChange={this.handleChange}
+                    ref="textarea"
+                    defaultValue={this.state.value} 
+          />
+        </div>
+        <div className="col-md-6 column">
+          <h3>Output</h3>
+          <div
+            className="content"
+            dangerouslySetInnerHTML={{
               __html: converter.makeHtml(this.state.value)
             }}
-          )
-        )
-      ) 
+          />
+        </div>
+      </div> 
     );
   }
 });
 
 React.renderComponent(
-  Container(null, 
-    MarkdownEditor(null )
-  ),
+  <Container>
+    <MarkdownEditor />
+  </Container>,
   document.getElementById("content")
 );
