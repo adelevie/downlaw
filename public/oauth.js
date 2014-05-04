@@ -2,7 +2,7 @@
 module.exports = {
   oauthd_url: "https://oauth.io",
   oauthd_api: "https://oauth.io/api",
-  version: "web-0.1.8",
+  version: "web-0.2.0",
   options: {}
 };
 
@@ -448,7 +448,7 @@ var Url,
 
 Url = require('../tools/url')();
 
-module.exports = function($, config, client_states, cache, providers_api) {
+module.exports = function($, config, client_states, cache) {
   return {
     http: function(opts) {
       var defer, desc_opts, doRequest, i, options;

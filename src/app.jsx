@@ -14,10 +14,10 @@ This file contains a few parts:
 require('citation');
 var React = require('react');
 var Showdown = require('showdown');
+var fs = require('fs');
+var github = require('octonode');
 
 // oauth.io config
-
-OAuth.initialize('YKdBYPro-nklUlmB5VjObiwxJyg');
 
 // citation => url functions
 
@@ -108,6 +108,31 @@ var converter = new Showdown.converter({ extensions: [citations] });
 
 // React stuff
 
+
+// from https://gist.github.com/zpao/8344371
+var CustomEvents = (function() {
+  var _map = {};
+ 
+  return {
+    subscribe: function(name, cb) {
+      _map[name] || (_map[name] = []);
+      _map[name].push(cb);
+    },
+ 
+    notify: function(name, data) {
+      if (!_map[name]) {
+        return;
+      }
+ 
+      // if you want canceling or anything else, add it in to this cb loop
+      _map[name].forEach(function(cb) {
+        cb(data);
+      });
+    }
+  }
+})();
+
+
 var Container = React.createClass({displayName: 'Container',
   render: function() {
     return (
@@ -120,26 +145,65 @@ var Container = React.createClass({displayName: 'Container',
   }
 });
 
+var MarkdownEditorSaveButton = React.createClass({
+  saveToGist: function() {
+    var token = this.props.accessToken;
+    var client = github.client(token);
+    client.gist.create({
+      description: "created from the api",
+      files: {
+        "foo.md": "*hello* world"
+      }
+    }, function(err, data) {
+      console.log(err);
+      console.log(data)
+    });
+  },
+  render: function() {
+    var disabled = !this.props.loggedIn;
+    if (disabled) { return <button disabled={disabled}>Login to Save to Gist</button>; }
+    return (
+      <button onClick={this.saveToGist}>Save to Gist</button>
+    );
+  }
+});
+
+
 var MarkdownEditor = React.createClass({displayName: 'MarkdownEditor',
   getInitialState: function() {
-    return {value: 'Type some *markdown* here! Legal citations become links.\n\nSee, e.g., 35 USC 112 and Ashcroft v. Iqbal, 556 U.S. 662 (2009).'};
+    return {
+      value: 'Type some *markdown* here! Legal citations become links.\n\nSee, e.g., 35 USC 112 and Ashcroft v. Iqbal, 556 U.S. 662 (2009).',
+      accessToken: null,
+      loggedIn: false
+    };
   },
   handleChange: function() {
     this.setState({value: this.refs.textarea.getDOMNode().value});
   },
+  componentDidMount: function() {
+    var ctx = this;
+    CustomEvents.subscribe('login', function(data) {
+      ctx.setState({
+        accessToken: data.accessToken,
+        loggedIn: true
+      })
+    });
+  },
   render: function() {
+    var disabled = !this.state.loggedIn;
     return (
       <div className="MarkdownEditor">
         <div className="col-md-6 column">
           <h3>Input</h3>
           <textarea className="field span20" 
                     id="textarea" 
-                    rows="25" 
+                    rows="23" 
                     cols="60" 
                     onChange={this.handleChange}
                     ref="textarea"
                     defaultValue={this.state.value} 
           />
+          <MarkdownEditorSaveButton loggedIn={this.state.loggedIn} accessToken={this.state.accessToken} />
         </div>
         <div className="col-md-6 column">
           <h3>Output</h3>
@@ -156,17 +220,38 @@ var MarkdownEditor = React.createClass({displayName: 'MarkdownEditor',
 });
 
 var GitHubLogin = React.createClass({
-  onClick: function(event) {
-    alert("clicked");
-    //OAuth.popup('github', function(err, result) {
-    // handle error with err
-    // use result.access_token in your API request
-    //});
+  componentWillMount: function() {
+    OAuth.initialize(this.props.oauth_io_public_key);
+  },
+  getInitialState: function () {
+    return {
+      'loggedIn': false,
+      'accessToken': null
+    };
+  },
+  logIn: function(event) {
+    var ctx = this;
+    OAuth.popup('github', function(error, result) {
+      if (error) { alert(error); }
+      var accessToken = result.access_token;
+      ctx.setState({
+        loggedIn: true,
+        accessToken: accessToken
+      });
+      CustomEvents.notify('login', {accessToken: accessToken});
+    });
+  },
+  logOut: function(event) {
+    this.setState({loggedIn: false});
   },
   render: function() {
-    return (
-      <button onClick={this.onClick}>Log in with GitHub</button>
-    );
+    var logInButton = <button onClick={this.logIn}>Log in with GitHub</button>;
+    var logOutButton = <button onClick={this.logOut}>Logout from GitHub</button>;
+    if (!this.state.loggedIn) {
+      return logInButton;
+    } else {
+      return logOutButton;
+    }
   }
 });
 
@@ -174,7 +259,7 @@ var GitHubLogin = React.createClass({
 
 React.renderComponent(
   <Container>
-    <GitHubLogin />
+    <GitHubLogin oauth_io_public_key="YKdBYPro-nklUlmB5VjObiwxJyg"/>
     <MarkdownEditor />
   </Container>,
   document.getElementById("content")
